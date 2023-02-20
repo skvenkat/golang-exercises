@@ -7,6 +7,7 @@ import (
 	"mastering-concurrency/part2"
 	"mastering-concurrency/part3"
 	"mastering-concurrency/part4"
+	"mastering-concurrency/part5"
 )
 
 func main() {
@@ -15,4 +16,5 @@ func main() {
 	part2.Part2()
 	part3.Part3()
 	part4.Part4()
+	part5.Part5()
 }
