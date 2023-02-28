@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	srvAddr := ":9040"
+	srvAddr := "127.0.0.1:9040"
 	tcpAddr, err := net.ResolveTCPAddr("tcp:", srvAddr)
 	if err != nil {
 		log.Fatalf("couldn't resolve the server with address %s\n%s", srvAddr, err.Error())
