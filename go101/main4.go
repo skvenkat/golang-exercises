@@ -2,7 +2,11 @@ package main
 
 // NoDiff checks whether or not a collection
 // of values are all identical.
-func NoDiff[V comparable](vs ...V) bool {
+
+type NoDiff[V comparable] struct{
+}
+
+func (nd NoDiff[V]) Do(vs ...V) bool {
 	if len(vs) == 0 {
 		return true
 	}
@@ -17,6 +21,7 @@ func NoDiff[V comparable](vs ...V) bool {
 }
 
 func main() {
+        /***
 	var NoDiffString = NoDiff[string]
 	println(NoDiff("Go", "Go", "Go")) // true
 	println(NoDiffString("Go", "go")) // false
@@ -32,3 +37,12 @@ func main() {
 	println(NoDiff(new(int), new(int))) // false
 
 	println(NoDiff[bool]())   // true
+        ***/
+
+        var NoDiffString = NoDiff[string]{}.Do
+	println(NoDiffString("Go", "go")) // false
+	
+	println(NoDiff[int]{}.Do(123, 123, 789)) // false
+	
+	println(NoDiff[*int]{}.Do(new(int))) // true
+}
