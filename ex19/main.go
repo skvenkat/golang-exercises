@@ -1,10 +1,11 @@
-
-package handlers
+package main
 
 import (
- "encoding/json"
- "net/http"
- "sync"
+	"encoding/json"
+	"log"
+	"net/http"
+	"net/http/pprof"
+	"sync"
 )
 
 type Request struct {
@@ -15,54 +16,67 @@ type Request struct {
 }
 
 type ObjectPool struct {
- ReqPool *sync.Pool
+    ReqPool *sync.Pool
 }
 
 var objPool ObjectPool
 
 func init() {
- // init object pool
- objPool.ReqPool = &sync.Pool{
-  New: func() interface{} {
-   return new(Request)
-  },
- }
-
+    // init object pool
+    objPool.ReqPool = &sync.Pool{
+        New: func() interface{} {
+        return new(Request)
+        },
+    }
 }
 
-
 func HandlerWithoutSyncPool() http.Handler {
- return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-  req :=new(Request)
-  err := json.NewDecoder(r.Body).Decode(&req)
-  if err != nil {
-   w.WriteHeader(http.StatusBadRequest)
-   return
-  }
-  w.WriteHeader(http.StatusOK)
-  err = json.NewEncoder(w).Encode(req)
-  if err != nil {
-   w.WriteHeader(http.StatusInternalServerError)
-   return
-  }
-
- })
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        req :=new(Request)
+        err := json.NewDecoder(r.Body).Decode(&req)
+        if err != nil {
+            w.WriteHeader(http.StatusBadRequest)
+            return
+        }
+        w.WriteHeader(http.StatusOK)
+        err = json.NewEncoder(w).Encode(req)
+        if err != nil {
+            w.WriteHeader(http.StatusInternalServerError)
+            return
+        }
+    })
 }
 
 func HandlerWithSyncPool() http.Handler {
- return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-  req := objPool.ReqPool.Get().(*Request)
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        req := objPool.ReqPool.Get().(*Request)
+        
+        //to make sure it return object to pool
+        defer objPool.ReqPool.Put(req)
+        
+        err := json.NewDecoder(r.Body).Decode(&req)
+        if err != nil {
+            w.WriteHeader(http.StatusBadRequest)
+            return
+        }
+        w.WriteHeader(http.StatusOK)
+    })
+}
 
- //to make sure it return object to pool
-  defer objPool.ReqPool.Put(req)
+func main() {
+    r := http.NewServeMux()
 
-  err := json.NewDecoder(r.Body).Decode(&req)
-  if err != nil {
-   w.WriteHeader(http.StatusBadRequest)
-   return
-  }
+    r.Handle("/withpool", HandlerWithSyncPool())
 
-  w.WriteHeader(http.StatusOK)
-  
- })
+    //Register pprof handlers
+    r.HandleFunc("/debug/pprof", pprof.Index)
+    r.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
+    r.HandleFunc("/debug/pprof/profile", pprof.Profile)
+    r.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
+    r.HandleFunc("/debug/pprof/trace", pprof.Trace)
+
+    err := http.ListenAndServe("0.0.0.0:9080", r)
+    if err != nil {
+        log.Fatal(err)
+    }
 }
