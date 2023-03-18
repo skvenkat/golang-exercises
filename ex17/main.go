@@ -1,7 +1,5 @@
-package main
-
-import (
-	"fmt"
+package mmport (
+Dr	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -9,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/mux"
 	"github.com/labstack/echo/v4"
+        "github.com/gofiber/fiber/v2
 )
 
 const (
@@ -70,6 +69,15 @@ func GorillaMux() {
 	log.Fatal(srv.ListenAndServe())
 }
 
+func FiberServer() {
+    app := fiber.New()
+    app.Get("/", func(ctx *fiber.Ctx) error {
+        return ctx.SendString("Hello, World!")
+    })
+
+    app.Listen(":4000")
+}
+
 func main() {
 	webserver := os.Args[1]
 	if webserver == "echo" {
@@ -78,6 +86,8 @@ func main() {
 		GinServer()
 	} else if webserver == "gorilla" {
 		GorillaMux()
+        } else if webserver == "fiber" {
+                FiberServer()
 	} else {
 		DefaultHTTP()
 	}
