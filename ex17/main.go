@@ -1,5 +1,7 @@
-package mmport (
-Dr	"fmt"
+package main
+
+import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -7,7 +9,7 @@ Dr	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/mux"
 	"github.com/labstack/echo/v4"
-        "github.com/gofiber/fiber/v2
+        "github.com/gofiber/fiber/v2"
 )
 
 const (
@@ -70,12 +72,13 @@ func GorillaMux() {
 }
 
 func FiberServer() {
+    fmt.Println("===  Fiber framework ===")
     app := fiber.New()
     app.Get("/", func(ctx *fiber.Ctx) error {
-        return ctx.SendString("Hello, World!")
+        return ctx.SendString("Hello from Fiber!")
     })
 
-    app.Listen(":4000")
+    app.Listen(ADDR_STR)
 }
 
 func main() {
