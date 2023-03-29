@@ -8,7 +8,7 @@ import (
 )
 
 func Greet(writer io.Writer, name string) {
-	fmt.Fprintf(writer, "Hello %sname!", name)
+	fmt.Fprintf(writer, "Hello %s!", name)
 }
 
 func MyGreetHandler(w http.ResponseWriter, r *http.Request) {
@@ -16,5 +16,5 @@ func MyGreetHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	log.Fatal(http.ListenAndServe("0.0.0.0:5001", http.HandlerFunc(MyGreetHandler))
+	log.Fatal(http.ListenAndServe("0.0.0.0:5001", http.HandlerFunc(MyGreetHandler)))
 }
