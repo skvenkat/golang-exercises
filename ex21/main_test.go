@@ -10,9 +10,9 @@ func TestGreet(t *testing.T) {
 	Greet(&buffer, "Gopher")
 
 	got := buffer.String()
-	want := "Hello, Gopher"
+	want := "Hello, Gopher!"
 
-	if not got != want {
+	if got != want {
 		t.Errorf("got %s | want %s", got, want)
 	}
 }
