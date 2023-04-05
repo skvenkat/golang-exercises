@@ -17,7 +17,7 @@ const (
 // processRequest simulates a complex workflow by sleeping for 10ms
 func processRequest(w http.ResponseWriter, r *http.Request) {
 	time.Sleep(10 * time.Millisecond)
-	io.WriteString(w, "Request Processed successfully!\n")
+	io.WriteString(w, "Request Processed Successfully!\n")
 }
 
 // rateLimitHandler limits the request rate to the specified requests per second
