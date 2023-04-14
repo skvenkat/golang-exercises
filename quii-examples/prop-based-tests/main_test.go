@@ -10,8 +10,8 @@ type TestCase struct {
 	Roman	string
 }
 
-var testCases []TestCase{}
-testcases := {
+//var testCases []TestCase
+var testCases = []TestCase{
 	/*
 	{"1 gets converted to I", 1, "I",},
 	{"2 gets converted to II", 2, "II",},
@@ -94,7 +94,7 @@ func TestRomanNumerals(t *testing.T) {
 
 func TestConvertToArabic(t *testing.T) {
 
-	for _, test := range testCases[:1] {
+	for _, test := range testCases[:5] {
 		t.Run(fmt.Sprintf("%q gets converted to %q", test.Roman, test.Arabic), func(t *testing.T){
 			got := ConvertToArabic(test.Roman)
 
