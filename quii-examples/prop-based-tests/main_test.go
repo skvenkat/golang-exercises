@@ -62,25 +62,6 @@ var testCases = []TestCase{
 }
 
 func TestRomanNumerals(t *testing.T) {
-	/*t.Run("1 gets converted to I", func(t *testing.T) {
-		got := ConvertToRoman(1)
-		want := "I"
-	
-		if got != want {
-			t.Errorf("got %q, want %q", got, want)
-		}
-	})
-
-	t.Run("2 gets converted to II", func(t *testing.T) {
-		got := ConvertToRoman(2)
-		want := "II"
-
-		if got != want {
-			t.Errorf("got %q, want %q", got, want)
-		}
-	})*/
-
-
 	for _, test := range testCases {
 		t.Run(fmt.Sprintf("%d gets converted to %q", test.Arabic, test.Roman), func(t *testing.T) {
 			got := ConvertToRoman(test.Arabic)
@@ -93,7 +74,6 @@ func TestRomanNumerals(t *testing.T) {
 }
 
 func TestConvertToArabic(t *testing.T) {
-
 	for _, test := range testCases[:5] {
 		t.Run(fmt.Sprintf("%q gets converted to %q", test.Roman, test.Arabic), func(t *testing.T){
 			got := ConvertToArabic(test.Roman)
