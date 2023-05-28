@@ -60,5 +60,29 @@ func TestCLI(t *testing.T) {
 		assertGameStartedWith(t, game, 8)
 		assertFinishCalledWith(t, game, "Cleo")
 	})
+	
+	t.Run("it prints an error when a non numeric value is entered and does not start the game", func(t *testing.T) {
+		game := &GameSpy{}
+
+		out := &bytes.Buffer{}
+		in := userSends("pies")
+
+		poker.NewCLI(in, out, game).PlayPoker()
+
+		assertGameNotStarted(t, game)
+		assertMessagesSentToUser(t, out, poker.PlayerPrompt, poker.BadPlayerInputErrMsg)
+	})
+
+	t.Run("it prints an error when the winner is declared incorrectly", func(t *testing.T) {
+		game := &GameSpy{}
+
+		out := &bytes.Buffer{}
+		in := userSends("8", "Lloyd is a killer")
+
+		poker.NewCLI(in, out, game).PlayPoker()
+
+		assertGameNotFinished(t, game)
+		assertMessagesSentToUser(t, out, poker.PlayerPrompt, poker.BadWinnerInputMsg)
+	})	
 }
 
