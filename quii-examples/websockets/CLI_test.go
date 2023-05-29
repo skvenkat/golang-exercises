@@ -86,3 +86,28 @@ func TestCLI(t *testing.T) {
 	})	
 }
 
+func assertGameStartedWith(t testing.TB, game *GameSpy, numberOfPlayersWanted int) {
+	t.Helper()
+
+	passed := retryUntil(500*time.Millisecond, func() bool {
+		return game.StartCalledWith == numberOfPlayersWanted
+	})
+
+	if !passed {
+		t.Errorf("wanted Start called with %d but got %d", numberOfPlayersWanted, game.StartCalledWith)
+	}
+}
+
+func assertGameNotFinished(t testing.TB, game *GameSpy) {
+	t.Helper()
+	if game.FinishedCalled {
+		t.Errorf("game should not have finished")
+	}
+}
+
+func assertGameNotStarted(t testing.TB, game *GameSpy) {
+	t.Helper()
+	if game.StartCalled {
+		t.Errorf("game should not have started")
+	}
+}
